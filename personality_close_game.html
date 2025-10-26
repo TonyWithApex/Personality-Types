@@ -463,16 +463,14 @@
     </style>
 </head>
 <body>
-    <!-- Password Screen -->
     <div class="password-screen" id="password-screen">
         <h1>🏠 Apex Academy</h1>
         <p>Wholesale Real Estate Training Access</p>
         <input type="password" class="password-input" id="password-input" placeholder="Enter password">
-        <button class="password-btn" onclick="checkPassword()">Access Training</button>
+        <button class="password-btn" id="password-btn">Access Training</button>
         <div class="password-error" id="password-error">❌ Incorrect password. Try again.</div>
     </div>
 
-    <!-- Game Container -->
     <div class="game-container" id="game-container">
         <div class="header">
             <h1>🏠 Seller Personality Training</h1>
@@ -509,25 +507,25 @@
                 </div>
                 
                 <div class="options-grid">
-                    <div class="personality-option option-red" onclick="checkAnswer('red')">
+                    <div class="personality-option option-red" data-color="red">
                         <div class="option-content">
                             <span class="option-emoji">🔴</span>
                             <div>RED<br><small>The Power Seller</small></div>
                         </div>
                     </div>
-                    <div class="personality-option option-blue" onclick="checkAnswer('blue')">
+                    <div class="personality-option option-blue" data-color="blue">
                         <div class="option-content">
                             <span class="option-emoji">🔵</span>
                             <div>BLUE<br><small>The Social Seller</small></div>
                         </div>
                     </div>
-                    <div class="personality-option option-green" onclick="checkAnswer('green')">
+                    <div class="personality-option option-green" data-color="green">
                         <div class="option-content">
                             <span class="option-emoji">🟢</span>
                             <div>GREEN<br><small>The Analytical Seller</small></div>
                         </div>
                     </div>
-                    <div class="personality-option option-yellow" onclick="checkAnswer('yellow')">
+                    <div class="personality-option option-yellow" data-color="yellow">
                         <div class="option-content">
                             <span class="option-emoji">🟡</span>
                             <div>YELLOW<br><small>The People-First Seller</small></div>
@@ -540,7 +538,7 @@
                 <div class="feedback-title" id="feedback-title"></div>
                 <p class="feedback-text" id="feedback-text"></p>
                 <div id="why-container"></div>
-                <button class="next-btn" onclick="nextScenario()">Next Seller →</button>
+                <button class="next-btn" id="next-btn">Next Seller →</button>
             </div>
 
             <div id="game-over" class="game-over">
@@ -564,13 +562,113 @@
 
                 <div id="high-score-message"></div>
                 
-                <button class="next-btn" onclick="resetGame()">Train Again 🔄</button>
+                <button class="next-btn" id="reset-btn">Train Again 🔄</button>
             </div>
         </div>
     </div>
 
     <script>
         const CORRECT_PASSWORD = "ApexAcademy2025";
+
+        const scenarios = [
+            {
+                text: "Cut to the chase — what's your number? I'm not doing a long back-and-forth. Give me your best. Other buyers already made me offers — can you beat them?",
+                correct: "red",
+                feedback: "Perfect! This is a RED Bottom-Line Closer - dominant, decisive, and competitive.",
+                whyRed: "RED sellers want control and speed. They're direct, impatient, and motivated by competition. Key phrases: 'cut to the chase' and 'other buyers already made offers' show they want the best deal fast with no games.",
+                whyNotBlue: "A BLUE Relationship Builder would be friendly, mention family or lifestyle, and want to build a personal connection before talking business.",
+                whyNotGreen: "A GREEN Fact Seeker would ask for data, comps, proof of funds, and want time to analyze everything before making a decision.",
+                whyNotYellow: "A YELLOW Win-Win Advocate would focus on fairness, family impact, and making sure everyone benefits from the deal."
+            },
+            {
+                text: "I just want to make sure I'm not leaving money on the table. Can you email me the exact numbers first? What comps did you use to get to that number? I'm not in a rush. I'd rather understand everything before I sign anything.",
+                correct: "green",
+                feedback: "Excellent! This is a GREEN Fact Seeker - slow, analytical, cautious, and detail-driven.",
+                whyGreen: "GREEN sellers need data, logic, and process. They're methodical and want to verify everything. Key phrases: 'not leaving money on the table' and 'rather understand everything' show their analytical, careful nature.",
+                whyNotRed: "A RED Bottom-Line Closer wouldn't ask for detailed analysis - they'd demand your best price immediately and want to close fast.",
+                whyNotBlue: "A BLUE Relationship Builder wouldn't focus on data - they'd want to chat, build rapport, and make decisions based on feelings and trust.",
+                whyNotYellow: "A YELLOW Win-Win Advocate would focus on family, fairness, and emotional considerations, not detailed financial analysis."
+            },
+            {
+                text: "Hey! You sound like you've been doing this a while — that's awesome. Oh my gosh, I love talking to people who are actually nice about this stuff. I just want this to be easy, you know? You're not one of those pushy investors, right?",
+                correct: "blue",
+                feedback: "Spot on! This is a BLUE Relationship Builder - friendly, outgoing, and people-first.",
+                whyBlue: "BLUE sellers make decisions based on connection, trust, and good feelings. They want the process to be easy and stress-free. Key phrases: 'you sound like' and 'I love talking to people' show they prioritize relationships over numbers.",
+                whyNotRed: "A RED Bottom-Line Closer would skip all small talk and go straight to 'What's your offer?' with no interest in building rapport.",
+                whyNotGreen: "A GREEN Fact Seeker would ask about your process, data, and comps - not whether you're 'nice' or 'pushy.'",
+                whyNotYellow: "While YELLOW sellers are also people-focused, they'd emphasize family impact and fairness, not just wanting the process to feel good."
+            },
+            {
+                text: "I just want to do what's best for my family. It's been in the family for years — I want it to go to someone good. My main concern is that everything's fair. I don't want anyone to get hurt in the process.",
+                correct: "yellow",
+                feedback: "Perfect! This is a YELLOW Win-Win Advocate - empathetic, family-oriented, and gentle.",
+                whyYellow: "YELLOW sellers prioritize fairness, family impact, and doing what's right. They want everyone to benefit. Key phrases: 'best for my family' and 'everything's fair' show their values-driven, caring nature.",
+                whyNotRed: "A RED Bottom-Line Closer would focus on getting the highest price and fastest close, not what's fair or who the buyer is.",
+                whyNotBlue: "A BLUE Relationship Builder would want to connect with YOU personally and chat, not focus on fairness and family legacy.",
+                whyNotGreen: "A GREEN Fact Seeker would want to see data, comps, and detailed analysis - not discuss fairness and family concerns."
+            },
+            {
+                text: "Can you break down the fees line by line? I want to run this by my accountant before I move forward. What's the title company you use? I'd like to verify their reviews. How do you calculate repair costs on properties like mine?",
+                correct: "green",
+                feedback: "Nailed it! This is a GREEN Fact Seeker - prepared, thorough, and detail-oriented.",
+                whyGreen: "GREEN sellers do their homework and want logical explanations for everything. They need time and data. Key phrases: 'break down the fees' and 'run this by my accountant' show their cautious, analytical decision-making.",
+                whyNotRed: "A RED Bottom-Line Closer wouldn't involve an accountant or ask about title companies - they'd just want your best number now.",
+                whyNotBlue: "A BLUE Relationship Builder wouldn't focus on fees and reviews - they'd trust their gut feeling about whether they like you.",
+                whyNotYellow: "A YELLOW Win-Win Advocate would ask about family impact and fairness, not detailed fee breakdowns and repair calculations."
+            },
+            {
+                text: "I don't have time for games. If you can close this week, maybe we've got a deal. I've sold properties before — I know how this works. Give me the highest you can do, and we'll shake hands.",
+                correct: "red",
+                feedback: "Exactly right! This is a RED Bottom-Line Closer - impatient, direct, and competitive.",
+                whyRed: "RED sellers are experienced, decisive, and want control. They move fast and respect strength. Key phrases: 'don't have time for games' and 'I know how this works' show their dominant, no-nonsense personality.",
+                whyNotBlue: "A BLUE Relationship Builder would want to talk longer, get to know you, and wouldn't rush the conversation.",
+                whyNotGreen: "A GREEN Fact Seeker would want detailed documentation and time to review everything, not close within a week.",
+                whyNotYellow: "A YELLOW Win-Win Advocate would want to discuss the bigger picture and make sure everyone benefits, not just get the deal done fast."
+            },
+            {
+                text: "I'm so glad you called — everyone else just sends texts. You seem really genuine — that matters to me. My grandkids visit every summer — I'll kinda miss this place. If this works out, maybe we can grab coffee sometime!",
+                correct: "blue",
+                feedback: "Perfect! This is a BLUE Relationship Builder - enthusiastic, social, and relationship-oriented.",
+                whyBlue: "BLUE sellers are warm, share personal stories, and want genuine connections. They make decisions based on feelings. Key phrases: 'so glad you called' and 'grab coffee sometime' show they value personal relationships over just business.",
+                whyNotRed: "A RED Bottom-Line Closer would never suggest coffee or talk about grandkids - they'd demand to know your offer immediately.",
+                whyNotGreen: "A GREEN Fact Seeker would ask about your process and data systematically, not share emotional stories about grandkids.",
+                whyNotYellow: "A YELLOW Win-Win Advocate would focus on family legacy and fairness, not wanting to socialize with you after closing."
+            },
+            {
+                text: "I'm just overwhelmed and need someone honest. I'd feel better knowing the house is in good hands. Can we make sure the tenants are treated right? It's not about the money — it's about peace of mind.",
+                correct: "yellow",
+                feedback: "Great job! This is a YELLOW Win-Win Advocate - empathetic and focused on doing right by others.",
+                whyYellow: "YELLOW sellers want honest, fair treatment and care about others being protected. They prioritize peace of mind over profit. Key phrases: 'need someone honest' and 'not about the money' show their values-driven, gentle nature.",
+                whyNotRed: "A RED Bottom-Line Closer would focus on the highest price and fastest close, not whether tenants are treated right.",
+                whyNotBlue: "A BLUE Relationship Builder would want to connect with YOU personally and share stories, not focus on tenant welfare.",
+                whyNotGreen: "A GREEN Fact Seeker would want to see proof, data, and verification - not emotional reassurance about peace of mind."
+            },
+            {
+                text: "Would you mind sending me that in writing? I prefer to deal with facts, not assumptions. What's the process step by step once I say yes? I'll need to compare this with a few other offers. Can I take a few days to review the contract?",
+                correct: "green",
+                feedback: "Exactly! This is a GREEN Fact Seeker - methodical, careful, and process-oriented.",
+                whyGreen: "GREEN sellers have a systematic approach and need written verification. They compare options carefully. Key phrases: 'prefer facts, not assumptions' and 'take a few days to review' show their deliberate, analytical decision-making.",
+                whyNotRed: "A RED Bottom-Line Closer wouldn't take days to review - they'd want to decide today and move on quickly.",
+                whyNotBlue: "A BLUE Relationship Builder wouldn't need everything in writing - they'd trust their feelings about whether they like you.",
+                whyNotYellow: "A YELLOW Win-Win Advocate would focus on fairness and family impact, not step-by-step process documentation."
+            },
+            {
+                text: "It's been in the family for years — I want it to go to someone good. I want to leave something behind for my kids. I'd like to help my sister out once this sells. If this helps someone else too, I'm all for it.",
+                correct: "yellow",
+                feedback: "Outstanding! This is a YELLOW Win-Win Advocate - family-oriented and focused on legacy.",
+                whyYellow: "YELLOW sellers consider family legacy and want decisions that help multiple people. They care about doing good. Key phrases: 'leave something behind for my kids' and 'helps someone else too' show their caring, win-win mentality.",
+                whyNotRed: "A RED Bottom-Line Closer would focus on getting their best deal quickly, not what happens to family or helping others.",
+                whyNotBlue: "A BLUE Relationship Builder would focus on connecting with YOU and sharing memories, not specifically about helping their sister.",
+                whyNotGreen: "A GREEN Fact Seeker would want comps, data, and detailed analysis - not discuss family legacy and helping others."
+            }
+        ];
+
+        let currentScenario = 0;
+        let score = 0;
+        let streak = 0;
+        let bestStreak = 0;
+        let correctAnswers = 0;
+        let highScore = 0;
 
         function checkPassword() {
             const input = document.getElementById('password-input');
@@ -587,111 +685,12 @@
             }
         }
 
+        document.getElementById('password-btn').addEventListener('click', checkPassword);
         document.getElementById('password-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
             }
         });
-
-        const scenarios = [
-            {
-                text: "Listen, I need to sell this house FAST. I've already got two other wholesalers coming by tomorrow. What's your best cash offer right now? And I mean your BEST offer - no games.",
-                correct: "red",
-                feedback: "Perfect! This is a RED Power Seller - they're direct, competitive, and want control of the situation.",
-                whyRed: "RED sellers are impatient, results-driven, and motivated by competition. They want you to get straight to numbers and respect their time. Key phrase: 'I've got two other wholesalers' shows competitive nature.",
-                whyNotBlue: "A BLUE Social Seller would focus on building rapport first and would mention family, feelings, or want to get to know you personally.",
-                whyNotGreen: "A GREEN Analytical Seller would ask for detailed comps, want to see your analysis process, and request time to review documents.",
-                whyNotYellow: "A YELLOW People-First Seller would emphasize what happens to the neighborhood, who buys it, or the legacy of the property."
-            },
-            {
-                text: "Before we discuss price, I need to see your comparable sales analysis. Can you send me the last 6 months of sales data in this zip code? I also want to understand your assignment fee structure and see proof of funds from your end buyer.",
-                correct: "green",
-                feedback: "Excellent! This is a GREEN Analytical Seller - detail-oriented, logical, and data-driven.",
-                whyGreen: "GREEN sellers need facts, data, and proof before making decisions. They're cautious and thorough. Key phrase: 'comparable sales analysis' and 'proof of funds' shows they want documentation.",
-                whyNotRed: "A RED Power Seller wouldn't ask for this much detail - they'd demand your best price immediately and want to close quickly.",
-                whyNotBlue: "A BLUE Social Seller wouldn't focus on data - they'd want to chat about your background, share stories, and build a personal connection first.",
-                whyNotYellow: "A YELLOW People-First Seller would focus on who's buying it and how it impacts the community, not the technical analysis."
-            },
-            {
-                text: "Oh wow, you seem really nice! I was just telling my daughter about selling the house. This place has so many memories - my kids grew up here. How long have you been doing this? Do you have a family? I'd love to hear about what got you into real estate!",
-                correct: "blue",
-                feedback: "Spot on! This is a BLUE Social Seller - relationship-focused, warm, and emotionally connected.",
-                whyBlue: "BLUE sellers make decisions based on feelings and relationships. They want to connect personally before talking business. Key phrase: 'telling my daughter' and 'so many memories' shows emotional connection and desire to chat.",
-                whyNotRed: "A RED Power Seller would skip the small talk entirely and go straight to 'What's your offer?' with no interest in your background.",
-                whyNotGreen: "A GREEN Analytical Seller would ask about your process, comps, and data - not about your family or personal story.",
-                whyNotYellow: "While YELLOW sellers are people-focused, they'd ask about the buyer's intentions for the property and community impact, not personal chitchat."
-            },
-            {
-                text: "My main concern is making sure this house goes to someone who will take care of it. This neighborhood has been our home for 30 years. Will your buyer renovate it for a family, or is it going to become a rental that brings down property values? I want to do right by my neighbors.",
-                correct: "yellow",
-                feedback: "Perfect! This is a YELLOW People-First Seller - values-driven and community-focused.",
-                whyYellow: "YELLOW sellers prioritize impact on others over maximum profit. They care about legacy and community. Key phrase: 'do right by my neighbors' and concern about what happens to the property shows values-driven thinking.",
-                whyNotRed: "A RED Power Seller would focus on getting the best price and fastest close, not what happens to the neighborhood afterwards.",
-                whyNotBlue: "A BLUE Social Seller would want to connect with YOU personally and share stories, not focus on the buyer's plans for the community.",
-                whyNotGreen: "A GREEN Analytical Seller would want to see data, comps, and your analysis - not discuss the philosophical impact on the neighborhood."
-            },
-            {
-                text: "I've created a spreadsheet comparing your offer to three other investors. Your price is 8% below the average. Can you explain your repair estimate line by line? Also, I noticed your ARV is lower than Zillow - walk me through your methodology.",
-                correct: "green",
-                feedback: "Nailed it! This is a GREEN Analytical Seller - prepared, thorough, and detail-oriented.",
-                whyGreen: "GREEN sellers do their homework and want logical explanations for everything. They've analyzed the numbers independently. Key phrase: 'created a spreadsheet' and wanting line-by-line explanations shows analytical nature.",
-                whyNotRed: "A RED Power Seller wouldn't create spreadsheets - they'd just tell you to beat the other offers or walk away.",
-                whyNotBlue: "A BLUE Social Seller wouldn't focus on data analysis - they'd be sharing stories and trying to build a personal relationship.",
-                whyNotYellow: "A YELLOW People-First Seller would ask about your buyer's plans and community impact, not challenge your repair estimate methodology."
-            },
-            {
-                text: "Look, I don't have time for a 30-minute presentation. I'm on another call in 10 minutes. Text me your highest cash offer and your close date. If it beats my other offer, we'll move forward. If not, I'm going with them today.",
-                correct: "red",
-                feedback: "Exactly right! This is a RED Power Seller - impatient, direct, and competitive.",
-                whyRed: "RED sellers are time-conscious, want concise information, and are motivated by competition. Key phrase: 'another call in 10 minutes' and ultimatum about 'going with them today' shows power-driven, competitive personality.",
-                whyNotBlue: "A BLUE Social Seller would want to talk longer, share more about themselves, and wouldn't rush you off the phone.",
-                whyNotGreen: "A GREEN Analytical Seller would want the full 30-minute presentation with all details, not a quick text with just numbers.",
-                whyNotYellow: "A YELLOW People-First Seller would want to discuss the bigger picture of the sale and wouldn't pressure you with a quick deadline."
-            },
-            {
-                text: "This is so exciting! I can't wait to start the next chapter. What area do you live in? Oh, you should totally check out this new coffee shop near me - amazing lattes! Anyway, when you buy the house, are you going to flip it? That would be so cool to see!",
-                correct: "blue",
-                feedback: "Perfect! This is a BLUE Social Seller - enthusiastic, social, and relationship-oriented.",
-                whyBlue: "BLUE sellers are energetic, want personal connections, and make decisions based on good feelings about people. Key phrase: random mention of 'coffee shop' and asking where you live shows desire for social connection beyond just business.",
-                whyNotRed: "A RED Power Seller would never ask about coffee shops or where you live - they'd demand to know your offer immediately.",
-                whyNotGreen: "A GREEN Analytical Seller would ask about your business model and process systematically, not casual social questions.",
-                whyNotYellow: "A YELLOW People-First Seller would focus on values and community impact, not casual social chitchat about coffee shops."
-            },
-            {
-                text: "I need to understand your business ethics. How do you treat the tenants currently living here? What's your company's mission? I've read reviews online - do you actually help sellers, or are you just trying to get the property cheap?",
-                correct: "yellow",
-                feedback: "Great job! This is a YELLOW People-First Seller - values-driven and ethically focused.",
-                whyYellow: "YELLOW sellers want to ensure their decisions align with their values and help others. They research your reputation. Key phrase: 'business ethics' and asking about your mission shows concern for doing what's right, not just profitable.",
-                whyNotRed: "A RED Power Seller doesn't care about your mission - they want the highest price and fastest close, period.",
-                whyNotBlue: "A BLUE Social Seller would ask about YOU personally, not your company's ethics and mission statement.",
-                whyNotGreen: "A GREEN Analytical Seller would ask about process, data, and methodology - not ethical questions about helping sellers."
-            },
-            {
-                text: "Send me your purchase agreement so my attorney can review it. I'll also need your business registration documents, proof of recent closings, and references from other sellers. I've allocated two weeks for due diligence before making a decision.",
-                correct: "green",
-                feedback: "Exactly! This is a GREEN Analytical Seller - methodical, careful, and process-oriented.",
-                whyGreen: "GREEN sellers have a systematic approach, want attorney review, and need time to verify everything. Key phrase: 'allocated two weeks for due diligence' shows deliberate, analytical decision-making process.",
-                whyNotRed: "A RED Power Seller wouldn't wait two weeks - they'd want to decide today and would be annoyed by lengthy due diligence.",
-                whyNotBlue: "A BLUE Social Seller wouldn't ask for attorney review and documentation - they'd trust their gut feeling about whether they like you.",
-                whyNotYellow: "A YELLOW People-First Seller would focus on your values and the outcome for all parties, not legal documentation and verification."
-            },
-            {
-                text: "The couple next door are elderly - will the construction noise during renovation bother them? Also, this house has always been owner-occupied. I'd feel terrible if it becomes an Airbnb and changes the character of the street. Can you guarantee that won't happen?",
-                correct: "yellow",
-                feedback: "Outstanding! This is a YELLOW People-First Seller - community-minded and relationship-focused.",
-                whyYellow: "YELLOW sellers consider how their decisions affect others and the community. They value stability and relationships over maximum profit. Key phrase: concern about 'elderly neighbors' and 'character of the street' shows people-first, community-focused thinking.",
-                whyNotRed: "A RED Power Seller wouldn't worry about neighbors or street character - they'd focus on getting their best deal quickly.",
-                whyNotBlue: "A BLUE Social Seller would focus on connecting with YOU personally and sharing neighbor stories, not specifically about protecting neighbors from noise.",
-                whyNotGreen: "A GREEN Analytical Seller would want data about comparable sales and renovation costs, not ask about neighbor impact."
-            }
-        ];
-
-        let currentScenario = 0;
-        let score = 0;
-        let streak = 0;
-        let bestStreak = 0;
-        let correctAnswers = 0;
-        let highScore = 0;
 
         async function initGame() {
             await loadHighScore();
@@ -705,5 +704,3 @@
                 const result = await window.storage.get('wholesale-high-score');
                 if (result) {
                     highScore = parseInt(result.value);
-                    document.getElementById('high-score').textContent = highScore;
-                
