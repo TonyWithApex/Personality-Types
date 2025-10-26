@@ -670,6 +670,27 @@
         let correctAnswers = 0;
         let highScore = 0;
 
+        // Initialize the game
+        function initGame() {
+            loadHighScore();
+            showScenario();
+            updateScoreboard();
+            updateProgress();
+            
+            // Add event listeners to personality options
+            document.querySelectorAll('.personality-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    checkAnswer(this.getAttribute('data-color'));
+                });
+            });
+            
+            // Add event listener to next button
+            document.getElementById('next-btn').addEventListener('click', nextScenario);
+            
+            // Add event listener to reset button
+            document.getElementById('reset-btn').addEventListener('click', resetGame);
+        }
+
         function checkPassword() {
             const input = document.getElementById('password-input');
             const error = document.getElementById('password-error');
@@ -685,6 +706,7 @@
             }
         }
 
+        // Add event listeners for password screen
         document.getElementById('password-btn').addEventListener('click', checkPassword);
         document.getElementById('password-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -692,15 +714,137 @@
             }
         });
 
-        async function initGame() {
-            await loadHighScore();
-            showScenario();
+        function loadHighScore() {
+            const savedHighScore = localStorage.getItem('wholesale-high-score');
+            if (savedHighScore) {
+                highScore = parseInt(savedHighScore);
+                document.getElementById('high-score').textContent = highScore;
+            }
+        }
+
+        function saveHighScore() {
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('wholesale-high-score', highScore.toString());
+                document.getElementById('high-score').textContent = highScore;
+            }
+        }
+
+        function showScenario() {
+            const scenario = scenarios[currentScenario];
+            document.getElementById('scenario-text').textContent = scenario.text;
+            document.getElementById('scenario-number').textContent = currentScenario + 1;
+            document.getElementById('feedback-container').style.display = 'none';
+            document.getElementById('scenario-container').style.display = 'block';
+            
+            // Re-enable all options
+            document.querySelectorAll('.personality-option').forEach(option => {
+                option.style.pointerEvents = 'auto';
+                option.style.opacity = '1';
+            });
+        }
+
+        function checkAnswer(selectedColor) {
+            const scenario = scenarios[currentScenario];
+            const feedbackContainer = document.getElementById('feedback-container');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+            const whyContainer = document.getElementById('why-container');
+
+            // Disable all options
+            document.querySelectorAll('.personality-option').forEach(option => {
+                option.style.pointerEvents = 'none';
+                if (option.getAttribute('data-color') !== scenario.correct) {
+                    option.style.opacity = '0.6';
+                }
+            });
+
+            if (selectedColor === scenario.correct) {
+                // Correct answer
+                score += 10;
+                streak++;
+                correctAnswers++;
+                if (streak > bestStreak) bestStreak = streak;
+                
+                feedbackContainer.className = 'feedback-box feedback-correct';
+                feedbackTitle.textContent = '✅ Correct!';
+                feedbackText.textContent = scenario.feedback;
+                
+                whyContainer.innerHTML = `
+                    <div class="why-box">
+                        <div class="why-title">Why this is a ${selectedColor.toUpperCase()} seller:</div>
+                        <div>${scenario['why' + selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)]}</div>
+                    </div>
+                `;
+            } else {
+                // Wrong answer
+                streak = 0;
+                feedbackContainer.className = 'feedback-box feedback-incorrect';
+                feedbackTitle.textContent = '❌ Not Quite Right';
+                feedbackText.textContent = `This was actually a ${scenario.correct.toUpperCase()} seller.`;
+                
+                whyContainer.innerHTML = `
+                    <div class="why-box">
+                        <div class="why-title">Why this is a ${scenario.correct.toUpperCase()} seller:</div>
+                        <div>${scenario['why' + scenario.correct.charAt(0).toUpperCase() + scenario.correct.slice(1)]}</div>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(52, 152, 219, 0.3);">
+                            <div class="why-title">Why it's not ${selectedColor.toUpperCase()}:</div>
+                            <div>${scenario['whyNot' + selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)]}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            feedbackContainer.style.display = 'block';
             updateScoreboard();
             updateProgress();
         }
 
-        async function loadHighScore() {
-            try {
-                const result = await window.storage.get('wholesale-high-score');
-                if (result) {
-                    highScore = parseInt(result.value);
+        function nextScenario() {
+            currentScenario++;
+            
+            if (currentScenario < scenarios.length) {
+                showScenario();
+            } else {
+                endGame();
+            }
+        }
+
+        function updateScoreboard() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+            document.getElementById('high-score').textContent = highScore;
+        }
+
+        function updateProgress() {
+            const progress = ((currentScenario) / scenarios.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+        }
+
+        function endGame() {
+            document.getElementById('scenario-container').style.display = 'none';
+            document.getElementById('feedback-container').style.display = 'none';
+            
+            const accuracy = Math.round((correctAnswers / scenarios.length) * 100);
+            const finalScore = score;
+            
+            saveHighScore();
+            
+            document.getElementById('final-score').textContent = finalScore;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('best-streak').textContent = bestStreak;
+            
+            // Set emoji based on performance
+            const resultEmoji = document.getElementById('result-emoji');
+            if (accuracy >= 90) {
+                resultEmoji.textContent = '🏆';
+            } else if (accuracy >= 70) {
+                resultEmoji.textContent = '🎉';
+            } else if (accuracy >= 50) {
+                resultEmoji.textContent = '👍';
+            } else {
+                resultEmoji.textContent = '💪';
+            }
+            
+            // High score message
+            const highScoreMessage = document.getElementById('high-score-message');
