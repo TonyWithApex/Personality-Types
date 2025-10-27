@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wholesale Real Estate - Personality Training</title>
+    <title>Seller Personality Training - Apex Academy</title>
     <style>
         * {
             margin: 0;
@@ -12,865 +12,369 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Arial', sans-serif;
+            background: #1e3c72;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
         .password-screen {
-            max-width: 500px;
-            margin: 100px auto;
             background: white;
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             text-align: center;
-            animation: slideUp 0.5s ease;
+            max-width: 400px;
+            width: 100%;
         }
 
         .password-screen h1 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
             color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2em;
         }
 
         .password-screen p {
             color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+            margin-bottom: 25px;
         }
 
         .password-input {
             width: 100%;
-            padding: 15px 20px;
-            font-size: 1.2em;
+            padding: 12px;
             border: 2px solid #ddd;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .password-input:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1em;
         }
 
         .password-btn {
             width: 100%;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            background: #3498db;
             color: white;
             border: none;
-            padding: 15px;
-            font-size: 1.2em;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .password-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+            font-size: 1em;
         }
 
         .password-error {
-            color: #e74c3c;
-            margin-top: 15px;
+            color: red;
+            margin-top: 10px;
             display: none;
-            font-weight: bold;
         }
 
         .game-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-            animation: slideUp 0.5s ease;
             display: none;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
         }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #2c3e50;
             color: white;
-            padding: 40px;
+            padding: 20px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.1); opacity: 0.5; }
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header .subtitle {
-            font-size: 1.2em;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
         }
 
         .score-board {
-            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            background: #34495e;
             color: white;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            font-size: 1.1em;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            font-weight: bold;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
         }
 
         .game-content {
-            padding: 50px 40px;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
-            transition: width 0.5s ease;
+            padding: 20px;
         }
 
         .scenario-box {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-left: 6px solid #e67e22;
-            padding: 30px;
-            margin-bottom: 35px;
-            border-radius: 12px;
-            min-height: 140px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .scenario-box::before {
-            content: '🏠';
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 60px;
-            opacity: 0.1;
-        }
-
-        .scenario-text {
-            font-size: 1.4em;
-            line-height: 1.6;
-            color: #2c3e50;
-            position: relative;
-            z-index: 1;
-            font-style: italic;
+            background: #f8f9fa;
+            border-left: 4px solid #e67e22;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
         }
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .personality-option {
-            padding: 25px;
-            border: 3px solid transparent;
-            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
             text-align: center;
-            font-weight: bold;
-            font-size: 1.15em;
-            position: relative;
-            overflow: hidden;
         }
 
-        .personality-option::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .personality-option:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .personality-option:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .personality-option:active {
-            transform: translateY(-2px);
-        }
-
-        .option-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .option-emoji {
-            font-size: 2em;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .option-red {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            color: #c62828;
-            border-color: #ef5350;
-        }
-
-        .option-blue {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1565c0;
-            border-color: #42a5f5;
-        }
-
-        .option-green {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            color: #2e7d32;
-            border-color: #66bb6a;
-        }
-
-        .option-yellow {
-            background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
-            color: #f57f17;
-            border-color: #ffeb3b;
-        }
+        .option-red { border-color: #e74c3c; background: #ffeaea; }
+        .option-blue { border-color: #3498db; background: #eaf2f8; }
+        .option-green { border-color: #2ecc71; background: #eafaf1; }
+        .option-yellow { border-color: #f39c12; background: #fef9e7; }
 
         .feedback-box {
             display: none;
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 25px;
-            animation: slideIn 0.5s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .feedback-correct {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border-left: 6px solid #4caf50;
-        }
-
-        .feedback-incorrect {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            border-left: 6px solid #f44336;
-        }
-
-        .feedback-title {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .feedback-text {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-
-        .why-box {
-            background: rgba(52, 152, 219, 0.1);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             margin-top: 15px;
-            border-left: 4px solid #3498db;
         }
 
-        .why-title {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
+        .feedback-correct { background: #d4edda; border-left: 4px solid #28a745; }
+        .feedback-incorrect { background: #f8d7da; border-left: 4px solid #dc3545; }
 
         .next-btn {
-            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            background: #e67e22;
             color: white;
             border: none;
-            padding: 18px 50px;
-            font-size: 1.2em;
-            border-radius: 50px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            display: block;
-            margin: 25px auto 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
-        }
-
-        .next-btn:hover {
-            background: linear-gradient(135deg, #d35400 0%, #ba4a00 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
-        }
-
-        .next-btn:active {
-            transform: translateY(-1px);
+            margin-top: 10px;
         }
 
         .game-over {
             text-align: center;
-            padding: 50px 40px;
+            padding: 30px;
             display: none;
         }
 
-        .result-emoji {
-            font-size: 5em;
-            margin-bottom: 25px;
-            animation: bounce 1s ease;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .result-title {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-
-        .result-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .result-stat {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .result-stat-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .result-stat-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #e67e22;
-        }
-
-        .high-score-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 50px;
-            margin-top: 15px;
-            font-weight: bold;
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(243, 156, 18, 0.5); }
-            50% { box-shadow: 0 0 25px rgba(243, 156, 18, 0.8); }
-        }
-
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .options-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .scenario-text {
-                font-size: 1.2em;
-            }
-
-            .game-content {
-                padding: 30px 20px;
-            }
-
-            .header h1 {
-                font-size: 2em;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Password Screen -->
     <div class="password-screen" id="password-screen">
         <h1>🏠 Apex Academy</h1>
-        <p>Wholesale Real Estate Training Access</p>
+        <p>Enter password to access training</p>
         <input type="password" class="password-input" id="password-input" placeholder="Enter password">
         <button class="password-btn" id="password-btn">Access Training</button>
-        <div class="password-error" id="password-error">❌ Incorrect password. Try again.</div>
+        <div class="password-error" id="password-error">❌ Incorrect password</div>
     </div>
 
+    <!-- Game Container -->
     <div class="game-container" id="game-container">
         <div class="header">
-            <h1>🏠 Seller Personality Training</h1>
-            <div class="subtitle">Master identifying seller types in wholesale real estate</div>
+            <h1>Seller Personality Training</h1>
+            <p>Identify seller types in real estate</p>
         </div>
         
         <div class="score-board">
-            <div class="stat-item">
-                <div class="stat-label">Score</div>
-                <div class="stat-value" id="score">0</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Seller</div>
-                <div class="stat-value"><span id="scenario-number">1</span>/10</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Streak</div>
-                <div class="stat-value" id="streak">0</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">High Score</div>
-                <div class="stat-value" id="high-score">0</div>
-            </div>
+            <div>Score: <span id="score">0</span></div>
+            <div>Question: <span id="scenario-number">1</span>/4</div>
+            <div>Streak: <span id="streak">0</span></div>
         </div>
 
         <div class="game-content">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-
             <div id="scenario-container">
                 <div class="scenario-box">
-                    <div class="scenario-text" id="scenario-text">Loading seller scenario...</div>
+                    <div class="scenario-text" id="scenario-text">Loading...</div>
                 </div>
                 
                 <div class="options-grid">
                     <div class="personality-option option-red" data-color="red">
-                        <div class="option-content">
-                            <span class="option-emoji">🔴</span>
-                            <div>RED<br><small>The Power Seller</small></div>
-                        </div>
+                        🔴 RED - Power Seller
                     </div>
                     <div class="personality-option option-blue" data-color="blue">
-                        <div class="option-content">
-                            <span class="option-emoji">🔵</span>
-                            <div>BLUE<br><small>The Social Seller</small></div>
-                        </div>
+                        🔵 BLUE - Social Seller
                     </div>
                     <div class="personality-option option-green" data-color="green">
-                        <div class="option-content">
-                            <span class="option-emoji">🟢</span>
-                            <div>GREEN<br><small>The Analytical Seller</small></div>
-                        </div>
+                        🟢 GREEN - Analytical Seller
                     </div>
                     <div class="personality-option option-yellow" data-color="yellow">
-                        <div class="option-content">
-                            <span class="option-emoji">🟡</span>
-                            <div>YELLOW<br><small>The People-First Seller</small></div>
-                        </div>
+                        🟡 YELLOW - People-First Seller
                     </div>
                 </div>
             </div>
 
             <div id="feedback-container" class="feedback-box">
-                <div class="feedback-title" id="feedback-title"></div>
-                <p class="feedback-text" id="feedback-text"></p>
-                <div id="why-container"></div>
-                <button class="next-btn" id="next-btn">Next Seller →</button>
+                <div id="feedback-title"></div>
+                <p id="feedback-text"></p>
+                <button class="next-btn" id="next-btn">Next Question →</button>
             </div>
 
             <div id="game-over" class="game-over">
-                <div class="result-emoji" id="result-emoji">🎉</div>
-                <h2 class="result-title">Training Complete!</h2>
-                
-                <div class="result-stats">
-                    <div class="result-stat">
-                        <div class="result-stat-label">Final Score</div>
-                        <div class="result-stat-value" id="final-score">0</div>
-                    </div>
-                    <div class="result-stat">
-                        <div class="result-stat-label">Accuracy</div>
-                        <div class="result-stat-value" id="accuracy">0%</div>
-                    </div>
-                    <div class="result-stat">
-                        <div class="result-stat-label">Best Streak</div>
-                        <div class="result-stat-value" id="best-streak">0</div>
-                    </div>
-                </div>
-
-                <div id="high-score-message"></div>
-                
-                <button class="next-btn" id="reset-btn">Train Again 🔄</button>
+                <h2>Training Complete! 🎉</h2>
+                <p>Final Score: <span id="final-score">0</span></p>
+                <button class="next-btn" id="reset-btn">Play Again</button>
             </div>
         </div>
     </div>
 
     <script>
-        const CORRECT_PASSWORD = "ApexAcademy2025";
-
+        // SIMPLE CONFIGURATION - This will work!
+        const CORRECT_PASSWORD = "test123"; // Simple password for testing
+        
+        // Game data
         const scenarios = [
             {
-                text: "Cut to the chase — what's your number? I'm not doing a long back-and-forth. Give me your best. Other buyers already made me offers — can you beat them?",
+                text: "Just give me your best offer. I don't have time for back-and-forth. Other investors are already calling me.",
                 correct: "red",
-                feedback: "Perfect! This is a RED Bottom-Line Closer - dominant, decisive, and competitive.",
-                whyRed: "RED sellers want control and speed. They're direct, impatient, and motivated by competition. Key phrases: 'cut to the chase' and 'other buyers already made offers' show they want the best deal fast with no games.",
-                whyNotBlue: "A BLUE Relationship Builder would be friendly, mention family or lifestyle, and want to build a personal connection before talking business.",
-                whyNotGreen: "A GREEN Fact Seeker would ask for data, comps, proof of funds, and want time to analyze everything before making a decision.",
-                whyNotYellow: "A YELLOW Win-Win Advocate would focus on fairness, family impact, and making sure everyone benefits from the deal."
+                feedback: "✅ Correct! This is a RED seller - direct and competitive."
             },
             {
-                text: "I just want to make sure I'm not leaving money on the table. Can you email me the exact numbers first? What comps did you use to get to that number? I'm not in a rush. I'd rather understand everything before I sign anything.",
-                correct: "green",
-                feedback: "Excellent! This is a GREEN Fact Seeker - slow, analytical, cautious, and detail-driven.",
-                whyGreen: "GREEN sellers need data, logic, and process. They're methodical and want to verify everything. Key phrases: 'not leaving money on the table' and 'rather understand everything' show their analytical, careful nature.",
-                whyNotRed: "A RED Bottom-Line Closer wouldn't ask for detailed analysis - they'd demand your best price immediately and want to close fast.",
-                whyNotBlue: "A BLUE Relationship Builder wouldn't focus on data - they'd want to chat, build rapport, and make decisions based on feelings and trust.",
-                whyNotYellow: "A YELLOW Win-Win Advocate would focus on family, fairness, and emotional considerations, not detailed financial analysis."
+                text: "I need to see all the numbers and comps first. Can you send me the detailed calculations?",
+                correct: "green", 
+                feedback: "✅ Correct! This is a GREEN seller - analytical and detail-oriented."
             },
             {
-                text: "Hey! You sound like you've been doing this a while — that's awesome. Oh my gosh, I love talking to people who are actually nice about this stuff. I just want this to be easy, you know? You're not one of those pushy investors, right?",
+                text: "You seem really knowledgeable! I'd love to hear more about your experience. This process has been stressful.",
                 correct: "blue",
-                feedback: "Spot on! This is a BLUE Relationship Builder - friendly, outgoing, and people-first.",
-                whyBlue: "BLUE sellers make decisions based on connection, trust, and good feelings. They want the process to be easy and stress-free. Key phrases: 'you sound like' and 'I love talking to people' show they prioritize relationships over numbers.",
-                whyNotRed: "A RED Bottom-Line Closer would skip all small talk and go straight to 'What's your offer?' with no interest in building rapport.",
-                whyNotGreen: "A GREEN Fact Seeker would ask about your process, data, and comps - not whether you're 'nice' or 'pushy.'",
-                whyNotYellow: "While YELLOW sellers are also people-focused, they'd emphasize family impact and fairness, not just wanting the process to feel good."
+                feedback: "✅ Correct! This is a BLUE seller - relationship-focused."
             },
             {
-                text: "I just want to do what's best for my family. It's been in the family for years — I want it to go to someone good. My main concern is that everything's fair. I don't want anyone to get hurt in the process.",
+                text: "I just want to make sure this is fair for everyone. My main concern is that the tenants are treated properly.",
                 correct: "yellow",
-                feedback: "Perfect! This is a YELLOW Win-Win Advocate - empathetic, family-oriented, and gentle.",
-                whyYellow: "YELLOW sellers prioritize fairness, family impact, and doing what's right. They want everyone to benefit. Key phrases: 'best for my family' and 'everything's fair' show their values-driven, caring nature.",
-                whyNotRed: "A RED Bottom-Line Closer would focus on getting the highest price and fastest close, not what's fair or who the buyer is.",
-                whyNotBlue: "A BLUE Relationship Builder would want to connect with YOU personally and chat, not focus on fairness and family legacy.",
-                whyNotGreen: "A GREEN Fact Seeker would want to see data, comps, and detailed analysis - not discuss fairness and family concerns."
-            },
-            {
-                text: "Can you break down the fees line by line? I want to run this by my accountant before I move forward. What's the title company you use? I'd like to verify their reviews. How do you calculate repair costs on properties like mine?",
-                correct: "green",
-                feedback: "Nailed it! This is a GREEN Fact Seeker - prepared, thorough, and detail-oriented.",
-                whyGreen: "GREEN sellers do their homework and want logical explanations for everything. They need time and data. Key phrases: 'break down the fees' and 'run this by my accountant' show their cautious, analytical decision-making.",
-                whyNotRed: "A RED Bottom-Line Closer wouldn't involve an accountant or ask about title companies - they'd just want your best number now.",
-                whyNotBlue: "A BLUE Relationship Builder wouldn't focus on fees and reviews - they'd trust their gut feeling about whether they like you.",
-                whyNotYellow: "A YELLOW Win-Win Advocate would ask about family impact and fairness, not detailed fee breakdowns and repair calculations."
-            },
-            {
-                text: "I don't have time for games. If you can close this week, maybe we've got a deal. I've sold properties before — I know how this works. Give me the highest you can do, and we'll shake hands.",
-                correct: "red",
-                feedback: "Exactly right! This is a RED Bottom-Line Closer - impatient, direct, and competitive.",
-                whyRed: "RED sellers are experienced, decisive, and want control. They move fast and respect strength. Key phrases: 'don't have time for games' and 'I know how this works' show their dominant, no-nonsense personality.",
-                whyNotBlue: "A BLUE Relationship Builder would want to talk longer, get to know you, and wouldn't rush the conversation.",
-                whyNotGreen: "A GREEN Fact Seeker would want detailed documentation and time to review everything, not close within a week.",
-                whyNotYellow: "A YELLOW Win-Win Advocate would want to discuss the bigger picture and make sure everyone benefits, not just get the deal done fast."
-            },
-            {
-                text: "I'm so glad you called — everyone else just sends texts. You seem really genuine — that matters to me. My grandkids visit every summer — I'll kinda miss this place. If this works out, maybe we can grab coffee sometime!",
-                correct: "blue",
-                feedback: "Perfect! This is a BLUE Relationship Builder - enthusiastic, social, and relationship-oriented.",
-                whyBlue: "BLUE sellers are warm, share personal stories, and want genuine connections. They make decisions based on feelings. Key phrases: 'so glad you called' and 'grab coffee sometime' show they value personal relationships over just business.",
-                whyNotRed: "A RED Bottom-Line Closer would never suggest coffee or talk about grandkids - they'd demand to know your offer immediately.",
-                whyNotGreen: "A GREEN Fact Seeker would ask about your process and data systematically, not share emotional stories about grandkids.",
-                whyNotYellow: "A YELLOW Win-Win Advocate would focus on family legacy and fairness, not wanting to socialize with you after closing."
-            },
-            {
-                text: "I'm just overwhelmed and need someone honest. I'd feel better knowing the house is in good hands. Can we make sure the tenants are treated right? It's not about the money — it's about peace of mind.",
-                correct: "yellow",
-                feedback: "Great job! This is a YELLOW Win-Win Advocate - empathetic and focused on doing right by others.",
-                whyYellow: "YELLOW sellers want honest, fair treatment and care about others being protected. They prioritize peace of mind over profit. Key phrases: 'need someone honest' and 'not about the money' show their values-driven, gentle nature.",
-                whyNotRed: "A RED Bottom-Line Closer would focus on the highest price and fastest close, not whether tenants are treated right.",
-                whyNotBlue: "A BLUE Relationship Builder would want to connect with YOU personally and share stories, not focus on tenant welfare.",
-                whyNotGreen: "A GREEN Fact Seeker would want to see proof, data, and verification - not emotional reassurance about peace of mind."
-            },
-            {
-                text: "Would you mind sending me that in writing? I prefer to deal with facts, not assumptions. What's the process step by step once I say yes? I'll need to compare this with a few other offers. Can I take a few days to review the contract?",
-                correct: "green",
-                feedback: "Exactly! This is a GREEN Fact Seeker - methodical, careful, and process-oriented.",
-                whyGreen: "GREEN sellers have a systematic approach and need written verification. They compare options carefully. Key phrases: 'prefer facts, not assumptions' and 'take a few days to review' show their deliberate, analytical decision-making.",
-                whyNotRed: "A RED Bottom-Line Closer wouldn't take days to review - they'd want to decide today and move on quickly.",
-                whyNotBlue: "A BLUE Relationship Builder wouldn't need everything in writing - they'd trust their feelings about whether they like you.",
-                whyNotYellow: "A YELLOW Win-Win Advocate would focus on fairness and family impact, not step-by-step process documentation."
-            },
-            {
-                text: "It's been in the family for years — I want it to go to someone good. I want to leave something behind for my kids. I'd like to help my sister out once this sells. If this helps someone else too, I'm all for it.",
-                correct: "yellow",
-                feedback: "Outstanding! This is a YELLOW Win-Win Advocate - family-oriented and focused on legacy.",
-                whyYellow: "YELLOW sellers consider family legacy and want decisions that help multiple people. They care about doing good. Key phrases: 'leave something behind for my kids' and 'helps someone else too' show their caring, win-win mentality.",
-                whyNotRed: "A RED Bottom-Line Closer would focus on getting their best deal quickly, not what happens to family or helping others.",
-                whyNotBlue: "A BLUE Relationship Builder would focus on connecting with YOU and sharing memories, not specifically about helping their sister.",
-                whyNotGreen: "A GREEN Fact Seeker would want comps, data, and detailed analysis - not discuss family legacy and helping others."
+                feedback: "✅ Correct! This is a YELLOW seller - values-driven and caring."
             }
         ];
 
+        // Game state
         let currentScenario = 0;
         let score = 0;
         let streak = 0;
-        let bestStreak = 0;
-        let correctAnswers = 0;
-        let highScore = 0;
 
-        // Initialize the game
+        // Get DOM elements
+        const passwordScreen = document.getElementById('password-screen');
+        const gameContainer = document.getElementById('game-container');
+        const passwordInput = document.getElementById('password-input');
+        const passwordBtn = document.getElementById('password-btn');
+        const passwordError = document.getElementById('password-error');
+        
+        const scenarioText = document.getElementById('scenario-text');
+        const scoreElement = document.getElementById('score');
+        const scenarioNumber = document.getElementById('scenario-number');
+        const streakElement = document.getElementById('streak');
+        
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScore = document.getElementById('final-score');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // Password check
+        passwordBtn.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function checkPassword() {
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                passwordScreen.style.display = 'none';
+                gameContainer.style.display = 'block';
+                initGame();
+            } else {
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+            }
+        }
+
+        // Initialize game
         function initGame() {
-            loadHighScore();
-            showScenario();
+            currentScenario = 0;
+            score = 0;
+            streak = 0;
             updateScoreboard();
-            updateProgress();
+            showScenario();
             
-            // Add event listeners to personality options
+            // Add click listeners to options
             document.querySelectorAll('.personality-option').forEach(option => {
                 option.addEventListener('click', function() {
                     checkAnswer(this.getAttribute('data-color'));
                 });
             });
             
-            // Add event listener to next button
-            document.getElementById('next-btn').addEventListener('click', nextScenario);
+            // Next button listener
+            nextBtn.addEventListener('click', nextScenario);
             
-            // Add event listener to reset button
-            document.getElementById('reset-btn').addEventListener('click', resetGame);
-        }
-
-        function checkPassword() {
-            const input = document.getElementById('password-input');
-            const error = document.getElementById('password-error');
-            
-            if (input.value === CORRECT_PASSWORD) {
-                document.getElementById('password-screen').style.display = 'none';
-                document.getElementById('game-container').style.display = 'block';
-                initGame();
-            } else {
-                error.style.display = 'block';
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        // Add event listeners for password screen
-        document.getElementById('password-btn').addEventListener('click', checkPassword);
-        document.getElementById('password-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
-        function loadHighScore() {
-            const savedHighScore = localStorage.getItem('wholesale-high-score');
-            if (savedHighScore) {
-                highScore = parseInt(savedHighScore);
-                document.getElementById('high-score').textContent = highScore;
-            }
-        }
-
-        function saveHighScore() {
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('wholesale-high-score', highScore.toString());
-                document.getElementById('high-score').textContent = highScore;
-            }
+            // Reset button listener
+            resetBtn.addEventListener('click', resetGame);
         }
 
         function showScenario() {
-            const scenario = scenarios[currentScenario];
-            document.getElementById('scenario-text').textContent = scenario.text;
-            document.getElementById('scenario-number').textContent = currentScenario + 1;
-            document.getElementById('feedback-container').style.display = 'none';
-            document.getElementById('scenario-container').style.display = 'block';
-            
-            // Re-enable all options
-            document.querySelectorAll('.personality-option').forEach(option => {
-                option.style.pointerEvents = 'auto';
-                option.style.opacity = '1';
-            });
-        }
-
-        function checkAnswer(selectedColor) {
-            const scenario = scenarios[currentScenario];
-            const feedbackContainer = document.getElementById('feedback-container');
-            const feedbackTitle = document.getElementById('feedback-title');
-            const feedbackText = document.getElementById('feedback-text');
-            const whyContainer = document.getElementById('why-container');
-
-            // Disable all options
-            document.querySelectorAll('.personality-option').forEach(option => {
-                option.style.pointerEvents = 'none';
-                if (option.getAttribute('data-color') !== scenario.correct) {
-                    option.style.opacity = '0.6';
-                }
-            });
-
-            if (selectedColor === scenario.correct) {
-                // Correct answer
-                score += 10;
-                streak++;
-                correctAnswers++;
-                if (streak > bestStreak) bestStreak = streak;
-                
-                feedbackContainer.className = 'feedback-box feedback-correct';
-                feedbackTitle.textContent = '✅ Correct!';
-                feedbackText.textContent = scenario.feedback;
-                
-                whyContainer.innerHTML = `
-                    <div class="why-box">
-                        <div class="why-title">Why this is a ${selectedColor.toUpperCase()} seller:</div>
-                        <div>${scenario['why' + selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)]}</div>
-                    </div>
-                `;
-            } else {
-                // Wrong answer
-                streak = 0;
-                feedbackContainer.className = 'feedback-box feedback-incorrect';
-                feedbackTitle.textContent = '❌ Not Quite Right';
-                feedbackText.textContent = `This was actually a ${scenario.correct.toUpperCase()} seller.`;
-                
-                whyContainer.innerHTML = `
-                    <div class="why-box">
-                        <div class="why-title">Why this is a ${scenario.correct.toUpperCase()} seller:</div>
-                        <div>${scenario['why' + scenario.correct.charAt(0).toUpperCase() + scenario.correct.slice(1)]}</div>
-                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(52, 152, 219, 0.3);">
-                            <div class="why-title">Why it's not ${selectedColor.toUpperCase()}:</div>
-                            <div>${scenario['whyNot' + selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)]}</div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            feedbackContainer.style.display = 'block';
-            updateScoreboard();
-            updateProgress();
-        }
-
-        function nextScenario() {
-            currentScenario++;
-            
             if (currentScenario < scenarios.length) {
-                showScenario();
+                const scenario = scenarios[currentScenario];
+                scenarioText.textContent = scenario.text;
+                scenarioNumber.textContent = currentScenario + 1;
+                feedbackContainer.style.display = 'none';
             } else {
                 endGame();
             }
         }
 
-        function updateScoreboard() {
-            document.getElementById('score').textContent = score;
-            document.getElementById('streak').textContent = streak;
-            document.getElementById('high-score').textContent = highScore;
+        function checkAnswer(selectedColor) {
+            const scenario = scenarios[currentScenario];
+            
+            if (selectedColor === scenario.correct) {
+                // Correct answer
+                score += 10;
+                streak++;
+                feedbackTitle.textContent = "✅ Correct!";
+                feedbackTitle.style.color = "#28a745";
+                feedbackContainer.className = "feedback-box feedback-correct";
+            } else {
+                // Wrong answer
+                streak = 0;
+                feedbackTitle.textContent = "❌ Incorrect";
+                feedbackTitle.style.color = "#dc3545";
+                feedbackContainer.className = "feedback-box feedback-incorrect";
+            }
+            
+            feedbackText.textContent = scenario.feedback;
+            feedbackContainer.style.display = 'block';
+            updateScoreboard();
         }
 
-        function updateProgress() {
-            const progress = ((currentScenario) / scenarios.length) * 100;
-            document.getElementById('progress-fill').style.width = `${progress}%`;
+        function nextScenario() {
+            currentScenario++;
+            showScenario();
+        }
+
+        function updateScoreboard() {
+            scoreElement.textContent = score;
+            streakElement.textContent = streak;
         }
 
         function endGame() {
             document.getElementById('scenario-container').style.display = 'none';
-            document.getElementById('feedback-container').style.display = 'none';
-            
-            const accuracy = Math.round((correctAnswers / scenarios.length) * 100);
-            const finalScore = score;
-            
-            saveHighScore();
-            
-            document.getElementById('final-score').textContent = finalScore;
-            document.getElementById('accuracy').textContent = accuracy + '%';
-            document.getElementById('best-streak').textContent = bestStreak;
-            
-            // Set emoji based on performance
-            const resultEmoji = document.getElementById('result-emoji');
-            if (accuracy >= 90) {
-                resultEmoji.textContent = '🏆';
-            } else if (accuracy >= 70) {
-                resultEmoji.textContent = '🎉';
-            } else if (accuracy >= 50) {
-                resultEmoji.textContent = '👍';
-            } else {
-                resultEmoji.textContent = '💪';
-            }
-            
-            // High score message
-            const highScoreMessage = document.getElementById('high-score-message');
-            if (finalScore > highScore) {
-                highScoreMessage.innerHTML = '<div class="high-score-badge">🏆 New High Score! 🏆</div>';
-            } else if (finalScore === highScore && highScore > 0) {
-                highScoreMessage.innerHTML = '<div class="high-score-badge">🔥 Tied High Score! 🔥</div>';
-            }
-            
-            document.getElementById('game-over').style.display = 'block';
+            feedbackContainer.style.display = 'none';
+            gameOverScreen.style.display = 'block';
+            finalScore.textContent = score;
         }
 
         function resetGame() {
             currentScenario = 0;
             score = 0;
             streak = 0;
-            bestStreak = 0;
-            correctAnswers = 0;
-            
-            document.getElementById('game-over').style.display = 'none';
-            loadHighScore();
-            initGame();
+            gameOverScreen.style.display = 'none';
+            document.getElementById('scenario-container').style.display = 'block';
+            updateScoreboard();
+            showScenario();
         }
 
-        // Initialize password screen
-        document.getElementById('password-input').focus();
+        // Focus on password input when page loads
+        window.onload = function() {
+            passwordInput.focus();
+        };
     </script>
 </body>
 </html>
