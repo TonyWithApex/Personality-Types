@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Personality Training - Apex Academy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #d4af37;
+        }
+
+        .password-screen {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 2px solid #d4af37;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .password-screen::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .password-screen h1 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+
+        .password-screen p {
+            color: #b8b8b8;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            position: relative;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            color: #d4af37;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .password-input::placeholder {
+            color: #b8b8b8;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .password-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            color: #000000;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .password-btn:hover {
+            background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .password-error {
+            color: #ff6b6b;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .game-container {
+            display: none;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 2px solid #d4af37;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.8s ease;
+            position: relative;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(212, 175, 55, 0.05) 50%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #d4af37;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .header p {
+            color: #b8b8b8;
+            font-size: 1.1em;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            color: #d4af37;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+            border-bottom: 1px solid #d4af37;
+        }
+
+        .score-board div {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .game-content {
+            padding: 30px;
+            position: relative;
+        }
+
+        .scenario-box {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            border-left: 5px solid #d4af37;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .personality-option {
+            padding: 20px;
+            border: 2px solid;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .personality-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .option-red { 
+            border-color: #e74c3c; 
+            color: #e74c3c;
+            background: linear-gradient(135deg, #2d1a1a 0%, #1a0d0d 100%);
+        }
+        .option-blue { 
+            border-color: #3498db; 
+            color: #3498db;
+            background: linear-gradient(135deg, #1a2d2d 0%, #0d1a1a 100%);
+        }
+        .option-green { 
+            border-color: #27ae60; 
+            color: #27ae60;
+            background: linear-gradient(135deg, #1a2d1a 0%, #0d1a0d 100%);
+        }
+        .option-yellow { 
+            border-color: #f39c12; 
+            color: #f39c12;
+            background: linear-gradient(135deg, #2d2d1a 0%, #1a1a0d 100%);
+        }
+
+        .feedback-box {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            animation: slideIn 0.5s ease;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            border: 1px solid #d4af37;
+        }
+
+        .feedback-correct { 
+            border-left: 5px solid #27ae60;
+        }
+        .feedback-incorrect { 
+            border-left: 5px solid #e74c3c;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            color: #000000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .game-over {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .game-over h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #d4af37;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .game-over p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .game-content {
+                padding: 20px;
+            }
+            
+            .password-screen {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Screen -->
+    <div class="password-screen" id="password-screen">
+        <h1>🏆 Apex Academy</h1>
+        <p>Exclusive Luxury Training Access</p>
+        <input type="password" class="password-input" id="password-input" placeholder="Enter Access Code">
+        <button class="password-btn" id="password-btn">Unlock Training</button>
+        <div class="password-error" id="password-error">❌ Incorrect access code</div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container" id="game-container">
+        <div class="header">
+            <h1>Seller Personality Mastery</h1>
+            <p>Luxury Training for Elite Real Estate Investors</p>
+        </div>
+        
+        <div class="score-board">
+            <div>Score: <span id="score">0</span></div>
+            <div>Question: <span id="scenario-number">1</span>/5</div>
+            <div>Streak: <span id="streak">0</span></div>
+        </div>
+
+        <div class="game-content">
+            <div id="scenario-container">
+                <div class="scenario-box">
+                    <div class="scenario-text" id="scenario-text">Loading elite training scenario...</div>
+                </div>
+                
+                <div class="options-grid">
+                    <div class="personality-option option-red" data-color="red">
+                        🔴 RED<br><small>The Power Seller</small>
+                    </div>
+                    <div class="personality-option option-blue" data-color="blue">
+                        🔵 BLUE<br><small>The Social Seller</small>
+                    </div>
+                    <div class="personality-option option-green" data-color="green">
+                        🟢 GREEN<br><small>The Analytical Seller</small>
+                    </div>
+                    <div class="personality-option option-yellow" data-color="yellow">
+                        🟡 YELLOW<br><small>The People-First Seller</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="feedback-container" class="feedback-box">
+                <div id="feedback-title" style="font-size: 1.3em; font-weight: bold; margin-bottom: 10px; color: #d4af37;"></div>
+                <p id="feedback-text" style="font-size: 1.1em; line-height: 1.5; color: #ffffff;"></p>
+                <button class="next-btn" id="next-btn">Continue Training →</button>
+            </div>
+
+            <div id="game-over" class="game-over">
+                <h2>Training Complete! 🏆</h2>
+                <p>Final Score: <strong id="final-score" style="color: #d4af37;">0</strong></p>
+                <button class="next-btn" id="reset-btn">Master Again 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // LUXURY PASSWORD
+        const CORRECT_PASSWORD = "ApexAcademy2025";
+        
+        // Game scenarios
+        const scenarios = [
+            {
+                text: "Cut to the chase — what's your number? I'm not doing a long back-and-forth. Give me your best. Other buyers already made me offers — can you beat them?",
+                correct: "red",
+                feedback: "Perfect! This is a RED Bottom-Line Closer - dominant, decisive, and competitive."
+            },
+            {
+                text: "I just want to make sure I'm not leaving money on the table. Can you email me the exact numbers first? What comps did you use to get to that number? I'm not in a rush.",
+                correct: "green",
+                feedback: "Excellent! This is a GREEN Fact Seeker - slow, analytical, cautious, and detail-driven."
+            },
+            {
+                text: "Hey! You sound like you've been doing this a while — that's awesome. Oh my gosh, I love talking to people who are actually nice about this stuff.",
+                correct: "blue",
+                feedback: "Spot on! This is a BLUE Relationship Builder - friendly, outgoing, and people-first."
+            },
+            {
+                text: "I just want to do what's best for my family. It's been in the family for years — I want it to go to someone good. My main concern is that everything's fair.",
+                correct: "yellow",
+                feedback: "Perfect! This is a YELLOW Win-Win Advocate - empathetic, family-oriented, and gentle."
+            },
+            {
+                text: "I don't have time for games. If you can close this week, maybe we've got a deal. I've sold properties before — I know how this works.",
+                correct: "red",
+                feedback: "Exactly right! This is a RED Bottom-Line Closer - impatient, direct, and competitive."
+            }
+        ];
+
+        // Game state
+        let currentScenario = 0;
+        let score = 0;
+        let streak = 0;
+
+        // Get DOM elements
+        const passwordScreen = document.getElementById('password-screen');
+        const gameContainer = document.getElementById('game-container');
+        const passwordInput = document.getElementById('password-input');
+        const passwordBtn = document.getElementById('password-btn');
+        const passwordError = document.getElementById('password-error');
+        
+        const scenarioText = document.getElementById('scenario-text');
+        const scoreElement = document.getElementById('score');
+        const scenarioNumber = document.getElementById('scenario-number');
+        const streakElement = document.getElementById('streak');
+        
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScore = document.getElementById('final-score');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // Password check
+        function checkPassword() {
+            const input = passwordInput.value.trim();
+            
+            if (input === CORRECT_PASSWORD) {
+                passwordError.style.display = 'none';
+                passwordScreen.style.animation = 'fadeOut 0.8s ease forwards';
+                setTimeout(() => {
+                    passwordScreen.style.display = 'none';
+                    gameContainer.style.display = 'block';
+                    initGame();
+                }, 800);
+            } else {
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+                
+                // Shake animation for wrong password
+                passwordScreen.style.animation = 'shake 0.5s ease';
+                setTimeout(() => {
+                    passwordScreen.style.animation = '';
+                }, 500);
+            }
+        }
+
+        passwordBtn.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Initialize game
+        function initGame() {
+            currentScenario = 0;
+            score = 0;
+            streak = 0;
+            updateScoreboard();
+            showScenario();
+            
+            // Add click listeners to options
+            document.querySelectorAll('.personality-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    checkAnswer(this.getAttribute('data-color'));
+                });
+            });
+            
+            // Next button listener
+            nextBtn.addEventListener('click', nextScenario);
+            
+            // Reset button listener
+            resetBtn.addEventListener('click', resetGame);
+        }
+
+        function showScenario() {
+            if (currentScenario < scenarios.length) {
+                const scenario = scenarios[currentScenario];
+                scenarioText.textContent = scenario.text;
+                scenarioNumber.textContent = currentScenario + 1;
+                feedbackContainer.style.display = 'none';
+                
+                // Re-enable options
+                document.querySelectorAll('.personality-option').forEach(option => {
+                    option.style.pointerEvents = 'auto';
+                    option.style.opacity = '1';
+                });
+            } else {
+                endGame();
+            }
+        }
+
+        function checkAnswer(selectedColor) {
+            const scenario = scenarios[currentScenario];
+            
+            // Disable all options
+            document.querySelectorAll('.personality-option').forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            if (selectedColor === scenario.correct) {
+                // Correct answer
+                score += 10;
+                streak++;
+                feedbackTitle.textContent = "✅ Elite Analysis!";
+                feedbackTitle.style.color = "#27ae60";
+                feedbackContainer.className = "feedback-box feedback-correct";
+            } else {
+                // Wrong answer
+                streak = 0;
+                feedbackTitle.textContent = "❌ Needs Refinement";
+                feedbackTitle.style.color = "#e74c3c";
+                feedbackContainer.className = "feedback-box feedback-incorrect";
+            }
+            
+            feedbackText.textContent = scenario.feedback;
+            feedbackContainer.style.display = 'block';
+            updateScoreboard();
+        }
+
+        function nextScenario() {
+            currentScenario++;
+            showScenario();
+        }
+
+        function updateScoreboard() {
+            scoreElement.textContent = score;
+            streakElement.textContent = streak;
+        }
+
+        function endGame() {
+            document.getElementById('scenario-container').style.display = 'none';
+            feedbackContainer.style.display = 'none';
+            gameOverScreen.style.display = 'block';
+            finalScore.textContent = score;
+        }
+
+        function resetGame() {
+            currentScenario = 0;
+            score = 0;
+            streak = 0;
+            gameOverScreen.style.display = 'none';
+            document.getElementById('scenario-container').style.display = 'block';
+            updateScoreboard();
+            showScenario();
+        }
+
+        // Focus on password input when page loads
+        window.addEventListener('load', function() {
+            passwordInput.focus();
+        });
+
+        // Add additional animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; visibility: hidden; }
+            }
+            
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
