@@ -166,7 +166,7 @@
             color: #d4af37;
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             text-align: center;
             border-bottom: 1px solid #d4af37;
@@ -192,6 +192,9 @@
             line-height: 1.6;
             color: #ffffff;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            min-height: 140px;
+            display: flex;
+            align-items: center;
         }
 
         .options-grid {
@@ -241,7 +244,7 @@
 
         .feedback-box {
             display: none;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             margin-top: 20px;
             animation: slideIn 0.5s ease;
@@ -254,6 +257,21 @@
         }
         .feedback-incorrect { 
             border-left: 5px solid #e74c3c;
+        }
+
+        .why-box {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid #d4af37;
+        }
+
+        .why-title {
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 8px;
+            font-size: 1.1em;
         }
 
         .next-btn {
@@ -315,7 +333,7 @@
             }
             
             .score-board {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
             
@@ -348,8 +366,9 @@
         
         <div class="score-board">
             <div>Score: <span id="score">0</span></div>
-            <div>Question: <span id="scenario-number">1</span>/5</div>
+            <div>Scenario: <span id="scenario-number">1</span>/20</div>
             <div>Streak: <span id="streak">0</span></div>
+            <div>High Score: <span id="high-score">0</span></div>
         </div>
 
         <div class="game-content">
@@ -376,13 +395,15 @@
 
             <div id="feedback-container" class="feedback-box">
                 <div id="feedback-title" style="font-size: 1.3em; font-weight: bold; margin-bottom: 10px; color: #d4af37;"></div>
-                <p id="feedback-text" style="font-size: 1.1em; line-height: 1.5; color: #ffffff;"></p>
+                <p id="feedback-text" style="font-size: 1.1em; line-height: 1.5; color: #ffffff; margin-bottom: 15px;"></p>
+                <div id="why-container"></div>
                 <button class="next-btn" id="next-btn">Continue Training →</button>
             </div>
 
             <div id="game-over" class="game-over">
                 <h2>Training Complete! 🏆</h2>
                 <p>Final Score: <strong id="final-score" style="color: #d4af37;">0</strong></p>
+                <p>Accuracy: <strong id="accuracy" style="color: #d4af37;">0%</strong></p>
                 <button class="next-btn" id="reset-btn">Master Again 🔄</button>
             </div>
         </div>
@@ -392,39 +413,106 @@
         // LUXURY PASSWORD
         const CORRECT_PASSWORD = "ApexAcademy2025";
         
-        // Game scenarios
-        const scenarios = [
-            {
-                text: "Cut to the chase — what's your number? I'm not doing a long back-and-forth. Give me your best. Other buyers already made me offers — can you beat them?",
-                correct: "red",
-                feedback: "Perfect! This is a RED Bottom-Line Closer - dominant, decisive, and competitive."
-            },
-            {
-                text: "I just want to make sure I'm not leaving money on the table. Can you email me the exact numbers first? What comps did you use to get to that number? I'm not in a rush.",
-                correct: "green",
-                feedback: "Excellent! This is a GREEN Fact Seeker - slow, analytical, cautious, and detail-driven."
-            },
-            {
-                text: "Hey! You sound like you've been doing this a while — that's awesome. Oh my gosh, I love talking to people who are actually nice about this stuff.",
-                correct: "blue",
-                feedback: "Spot on! This is a BLUE Relationship Builder - friendly, outgoing, and people-first."
-            },
-            {
-                text: "I just want to do what's best for my family. It's been in the family for years — I want it to go to someone good. My main concern is that everything's fair.",
-                correct: "yellow",
-                feedback: "Perfect! This is a YELLOW Win-Win Advocate - empathetic, family-oriented, and gentle."
-            },
-            {
-                text: "I don't have time for games. If you can close this week, maybe we've got a deal. I've sold properties before — I know how this works.",
-                correct: "red",
-                feedback: "Exactly right! This is a RED Bottom-Line Closer - impatient, direct, and competitive."
-            }
-        ];
+        // PERSONALITY DIALOGUE DATABASE - 20 LINES EACH
+        const dialogueDatabase = {
+            red: [
+                "Just give me your best offer right now - I don't have time for games.",
+                "I've got three other investors waiting. Can you beat $250k?",
+                "Make it quick - I need this done by Friday or I'm moving to the next buyer.",
+                "Don't waste my time with small talk. What's your highest number?",
+                "I know what this property is worth. Give me your real offer, not some lowball.",
+                "Cut the BS and tell me what you'll actually pay. Today.",
+                "I'm not interested in your process. Just give me the bottom line.",
+                "Other buyers are already at asking price. Can you do better?",
+                "I want this wrapped up in 7 days max. Can you handle that?",
+                "Stop with the questions and give me a real number.",
+                "I've sold plenty of houses - I know when someone's playing games.",
+                "Your offer needs to be clean, cash, and quick. Otherwise, next.",
+                "I don't care about your company story. What's your price?",
+                "Time is money. Give me your best and final right now.",
+                "I'm not negotiating back and forth. One shot - make it good.",
+                "Skip the inspection period. I want a clean, fast close.",
+                "You're not the only investor in this city. Make it worth my while.",
+                "I need this sold yesterday. What's your fastest closing time?",
+                "Don't try to nickel and dime me. I know the market value.",
+                "Give me one number - your absolute highest. No counters."
+            ],
+            green: [
+                "Before we proceed, can you send me your company's financial credentials?",
+                "I'd like to see the exact comps you used to determine that value.",
+                "What's your track record with properties in this specific neighborhood?",
+                "Can you break down all the fees and closing costs line by line?",
+                "I need to review your purchase agreement with my attorney first.",
+                "What's the data behind your repair cost estimates?",
+                "I'd prefer everything in writing so I can analyze it properly.",
+                "How many similar properties have you actually closed in the past year?",
+                "I want to see proof of funds before we go any further.",
+                "Can you provide references from other sellers you've worked with?",
+                "I need to understand your entire process step by step.",
+                "What's the historical data for property values on this street?",
+                "I'd like to verify your contractor's license and insurance.",
+                "Can you show me the math behind your ARV calculation?",
+                "I need a few days to research your company's reputation online.",
+                "What specific metrics are you using to determine market value?",
+                "I want to see your company's financial stability statements.",
+                "Can you provide documentation of your successful flips?",
+                "I need to review all the paperwork with my accountant.",
+                "What's the data-driven reason for your specific offer amount?"
+            ],
+            blue: [
+                "You seem like such a nice person! How long have you been doing this?",
+                "I just want this to be a positive experience for everyone involved.",
+                "Tell me about yourself - I love working with people I connect with.",
+                "This house has so many memories. I hope the next owners love it like we did.",
+                "You have such great energy! I can tell you're someone I can trust.",
+                "Let's make this easy and stress-free for both of us, okay?",
+                "I'm so glad you called! The last investor was so pushy and rude.",
+                "This process has been so emotional for me. I appreciate you being understanding.",
+                "Maybe we could grab coffee after this and chat more?",
+                "Your voice is so calming! This is already feeling better.",
+                "I just want someone who will appreciate this home's character.",
+                "You're not like those other investors, are you? You seem genuine.",
+                "Tell me about your family - are you from around here?",
+                "I feel like we're really connecting here. That means a lot to me.",
+                "Let's keep this friendly and straightforward, no pressure.",
+                "I've been so stressed about selling. Talking to you is such a relief.",
+                "You understand how important this home is to me, don't you?",
+                "I can tell you actually care about people, not just deals.",
+                "This feels more like a conversation than a business transaction.",
+                "I really appreciate you taking the time to understand my situation."
+            ],
+            yellow: [
+                "My main concern is that the new owners will take good care of the place.",
+                "I want this to be fair for everyone - that's most important to me.",
+                "This was my parents' home. I need to honor their legacy.",
+                "The neighbors have been like family - I hope they're treated well.",
+                "Money isn't everything. I want to do what's morally right.",
+                "My children grew up here. I want the next family to be happy.",
+                "I'm more concerned about the community impact than the price.",
+                "Let's make sure this works for everyone involved.",
+                "This decision affects my whole family. I need to consider them.",
+                "I want to sleep well at night knowing I did the right thing.",
+                "The tenants have been wonderful. I need to protect them.",
+                "This isn't just about money - it's about doing what's ethical.",
+                "I hope the buyer will continue supporting local charities like we did.",
+                "My priority is making sure no one gets taken advantage of.",
+                "This house has history. I want someone who appreciates that.",
+                "I need to know the buyer will be a good community member.",
+                "Let's find a solution that helps everyone involved.",
+                "I'm thinking about my grandchildren's memories here.",
+                "Fairness and integrity matter more than a few extra dollars.",
+                "I want this transition to be smooth and positive for everyone."
+            ]
+        };
 
         // Game state
         let currentScenario = 0;
         let score = 0;
         let streak = 0;
+        let bestStreak = 0;
+        let correctAnswers = 0;
+        let highScore = 0;
+        let usedScenarios = new Set();
 
         // Get DOM elements
         const passwordScreen = document.getElementById('password-screen');
@@ -437,15 +525,53 @@
         const scoreElement = document.getElementById('score');
         const scenarioNumber = document.getElementById('scenario-number');
         const streakElement = document.getElementById('streak');
+        const highScoreElement = document.getElementById('high-score');
         
         const feedbackContainer = document.getElementById('feedback-container');
         const feedbackTitle = document.getElementById('feedback-title');
         const feedbackText = document.getElementById('feedback-text');
+        const whyContainer = document.getElementById('why-container');
         const nextBtn = document.getElementById('next-btn');
         
         const gameOverScreen = document.getElementById('game-over');
         const finalScore = document.getElementById('final-score');
+        const accuracyElement = document.getElementById('accuracy');
         const resetBtn = document.getElementById('reset-btn');
+
+        // Generate random scenario
+        function generateRandomScenario() {
+            const personalityTypes = ['red', 'green', 'blue', 'yellow'];
+            const randomType = personalityTypes[Math.floor(Math.random() * personalityTypes.length)];
+            const dialogues = dialogueDatabase[randomType];
+            const randomDialogue = dialogues[Math.floor(Math.random() * dialogues.length)];
+            
+            return {
+                text: `"${randomDialogue}"`,
+                correct: randomType,
+                feedback: getFeedbackForType(randomType),
+                why: getWhyExplanation(randomType)
+            };
+        }
+
+        function getFeedbackForType(type) {
+            const feedbacks = {
+                red: "Perfect! This is a RED Bottom-Line Closer - direct, competitive, and time-sensitive.",
+                green: "Excellent! This is a GREEN Fact Seeker - analytical, detail-oriented, and cautious.",
+                blue: "Spot on! This is a BLUE Relationship Builder - people-focused, emotional, and connection-driven.",
+                yellow: "Exactly! This is a YELLOW Win-Win Advocate - values-driven, family-oriented, and fairness-focused."
+            };
+            return feedbacks[type];
+        }
+
+        function getWhyExplanation(type) {
+            const explanations = {
+                red: "RED sellers are decisive, competitive, and want control. They prioritize speed and directness over relationship building. Key indicators include urgency, competition mentions, and bottom-line focus.",
+                green: "GREEN sellers need data, verification, and process. They're methodical, cautious, and make decisions based on logic rather than emotion. Look for requests for documentation and detailed information.",
+                blue: "BLUE sellers value connection, trust, and positive experiences. They make decisions based on relationships and feelings. Watch for personal sharing, emotional language, and rapport-building.",
+                yellow: "YELLOW sellers prioritize fairness, legacy, and community impact. They're values-driven and consider the human element in decisions. Note mentions of family, community, and ethical considerations."
+            };
+            return explanations[type];
+        }
 
         // Password check
         function checkPassword() {
@@ -479,9 +605,13 @@
 
         // Initialize game
         function initGame() {
+            loadHighScore();
             currentScenario = 0;
             score = 0;
             streak = 0;
+            bestStreak = 0;
+            correctAnswers = 0;
+            usedScenarios.clear();
             updateScoreboard();
             showScenario();
             
@@ -499,12 +629,31 @@
             resetBtn.addEventListener('click', resetGame);
         }
 
+        function loadHighScore() {
+            const savedHighScore = localStorage.getItem('apex-high-score');
+            if (savedHighScore) {
+                highScore = parseInt(savedHighScore);
+                highScoreElement.textContent = highScore;
+            }
+        }
+
+        function saveHighScore() {
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('apex-high-score', highScore.toString());
+                highScoreElement.textContent = highScore;
+            }
+        }
+
         function showScenario() {
-            if (currentScenario < scenarios.length) {
-                const scenario = scenarios[currentScenario];
+            if (currentScenario < 20) {
+                const scenario = generateRandomScenario();
                 scenarioText.textContent = scenario.text;
                 scenarioNumber.textContent = currentScenario + 1;
                 feedbackContainer.style.display = 'none';
+                
+                // Store current scenario for answer checking
+                window.currentScenario = scenario;
                 
                 // Re-enable options
                 document.querySelectorAll('.personality-option').forEach(option => {
@@ -517,28 +666,48 @@
         }
 
         function checkAnswer(selectedColor) {
-            const scenario = scenarios[currentScenario];
+            const scenario = window.currentScenario;
             
             // Disable all options
             document.querySelectorAll('.personality-option').forEach(option => {
                 option.style.pointerEvents = 'none';
+                if (option.getAttribute('data-color') !== scenario.correct) {
+                    option.style.opacity = '0.6';
+                }
             });
 
             if (selectedColor === scenario.correct) {
                 // Correct answer
                 score += 10;
                 streak++;
+                correctAnswers++;
+                if (streak > bestStreak) bestStreak = streak;
+                
                 feedbackTitle.textContent = "✅ Elite Analysis!";
                 feedbackTitle.style.color = "#27ae60";
                 feedbackContainer.className = "feedback-box feedback-correct";
+                
+                whyContainer.innerHTML = `
+                    <div class="why-box">
+                        <div class="why-title">Why this is a ${selectedColor.toUpperCase()} seller:</div>
+                        <div style="color: #ffffff;">${scenario.why}</div>
+                    </div>
+                `;
             } else {
                 // Wrong answer
                 streak = 0;
                 feedbackTitle.textContent = "❌ Needs Refinement";
                 feedbackTitle.style.color = "#e74c3c";
                 feedbackContainer.className = "feedback-box feedback-incorrect";
+                
+                whyContainer.innerHTML = `
+                    <div class="why-box">
+                        <div class="why-title">Why this is actually a ${scenario.correct.toUpperCase()} seller:</div>
+                        <div style="color: #ffffff;">${scenario.why}</div>
+                    </div>
+                `;
             }
-            
+
             feedbackText.textContent = scenario.feedback;
             feedbackContainer.style.display = 'block';
             updateScoreboard();
@@ -552,19 +721,27 @@
         function updateScoreboard() {
             scoreElement.textContent = score;
             streakElement.textContent = streak;
+            highScoreElement.textContent = highScore;
         }
 
         function endGame() {
             document.getElementById('scenario-container').style.display = 'none';
             feedbackContainer.style.display = 'none';
             gameOverScreen.style.display = 'block';
+            
+            const accuracy = Math.round((correctAnswers / 20) * 100);
             finalScore.textContent = score;
+            accuracyElement.textContent = accuracy + '%';
+            
+            saveHighScore();
         }
 
         function resetGame() {
             currentScenario = 0;
             score = 0;
             streak = 0;
+            correctAnswers = 0;
+            usedScenarios.clear();
             gameOverScreen.style.display = 'none';
             document.getElementById('scenario-container').style.display = 'block';
             updateScoreboard();
