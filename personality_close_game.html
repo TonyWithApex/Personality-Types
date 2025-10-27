@@ -849,4 +849,28 @@
             // High score message
             const highScoreMessage = document.getElementById('high-score-message');
             if (finalScore > highScore) {
-               
+                highScoreMessage.innerHTML = '<div class="high-score-badge">🏆 New High Score! 🏆</div>';
+            } else if (finalScore === highScore && highScore > 0) {
+                highScoreMessage.innerHTML = '<div class="high-score-badge">🔥 Tied High Score! 🔥</div>';
+            }
+            
+            document.getElementById('game-over').style.display = 'block';
+        }
+
+        function resetGame() {
+            currentScenario = 0;
+            score = 0;
+            streak = 0;
+            bestStreak = 0;
+            correctAnswers = 0;
+            
+            document.getElementById('game-over').style.display = 'none';
+            loadHighScore();
+            initGame();
+        }
+
+        // Initialize password screen
+        document.getElementById('password-input').focus();
+    </script>
+</body>
+</html>
